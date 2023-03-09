@@ -32,4 +32,4 @@ SET COUNT=2022
 ```
 
 # Result
-## It will auto save the log for each epoch,and save the model with minimum loss of validation set and its result on test set.You can find them in root dir.
+## It will auto save the log for each epoch,and save the model with minimum loss of validation set and its result on test set.You can find them in root dir after training.
