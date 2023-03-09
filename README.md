@@ -22,4 +22,4 @@ python train.py --dataset semeval18 --optimizer adamw --model_name multilabel_ba
 ```
 
 # Result
-## It will auto save the log for each epoch,and save the model with minimum loss of validation set and its result on test set.
+## It will auto save the log for each epoch,and save the model with minimum loss of validation set and its result on test set.You can find them in root dir.
