@@ -51,26 +51,30 @@ class sst5_trainer:
 
         for epoch in range(n_epochs):
 
-            train_loss, train_acc ,train_micro_f1,train_macro_f1= self._train()
-            valid_loss, valid_acc,valid_micro_f1,valid_macro_f1 = self._evaluate()
-            test_loss,test_acc,test_micro_f1,test_macro_f1,pred,labels=self._test()
+            train_loss, train_acc ,train_jac,train_micro_f1,train_macro_f1= self._train()
+            valid_loss, valid_acc,valid_jac,valid_micro_f1,valid_macro_f1 = self._evaluate()
+            
 
             
             if valid_loss <best_valid_loss:
                 best_valid_loss = valid_loss
-                # self._save_model(epoch,test_loss,test_acc)
+                test_loss,test_acc,test_jac,test_micro_f1,test_macro_f1,pred,labels=self._test()
+                logging.info("new best valid_loss,test on test set.......")
+                print("new best valid_loss,test on test set.......")
+                logging.info(f'test_loss: {test_loss:.3f}, test_acc: {test_acc:.3f}, test_jac: {test_jac:.3f}, test_micro_f1: {test_micro_f1:.3f},test_macro_f1: {test_macro_f1:.3f}')
+                self._save_model(epoch,test_loss,test_acc)
                 self._save_pred_and_labels(epoch,pred,labels)
                 
 
-            logging.info(f'epoch: {epoch+1}')
-            logging.info(f'train_loss: {train_loss:.3f}, train_acc: {train_acc:.3f}, train_micro_f1: {train_micro_f1:.3f},train_macro_f1:{train_macro_f1:.3f}')
-            logging.info(f'valid_loss: {valid_loss:.3f}, valid_acc: {valid_acc:.3f}, valid_micro_f1: {valid_micro_f1:.3f},valid_macro_f1: {valid_macro_f1:.3f}')        
-            logging.info(f'test_loss: {test_loss:.3f}, test_acc: {test_acc:.3f}, test_micro_f1: {test_micro_f1:.3f},test_macro_f1: {test_macro_f1:.3f}')
+            logging.info(f'epoch: {epoch}')
+            logging.info(f'train_loss: {train_loss:.3f}, train_acc: {train_acc:.3f}, train_jac: {train_jac:.3f}, train_micro_f1: {train_micro_f1:.3f},train_macro_f1:{train_macro_f1:.3f}')
+            logging.info(f'valid_loss: {valid_loss:.3f}, valid_acc: {valid_acc:.3f}, valid_jac: {valid_jac:.3f}, valid_micro_f1: {valid_micro_f1:.3f},valid_macro_f1: {valid_macro_f1:.3f}')        
+            
     
     
     def _save_model(self,epoch,loss,acc):
         path_name=self.opt.model_name+'_'+self.opt.pretrained_bert_name+'_'+self.time
-        file_name="epoch_"+str(epoch)+'_'+"acc_"+'{:.4f}'.format(acc)
+        file_name="epoch_"+str(epoch)+'_'+"loss_"+'{:.4f}'.format(loss)
         if not os.path.exists(path_name):
             os.mkdir(path_name)
         with open(path_name+'//option.json','w') as f:
