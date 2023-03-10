@@ -25,6 +25,7 @@ class semeval18_trainer:
         self.test_loader=self.dataloader.test_loader
         self.model=model_classes[self.opt.model_name](self.opt).to(self.device)
         _params = filter(lambda p: p.requires_grad, self.model.parameters())
+        self.best_valid_loss_model=None
         self.optimizer=optim_classes[self.opt.optimizer](_params,lr=self.opt.learning_rate, weight_decay=self.opt.l2reg)
         self.time=datetime.strftime(datetime.now(),'%Y%m%d-%H%M%S')
         self._init_log()
@@ -61,13 +62,14 @@ class semeval18_trainer:
                  
             if valid_loss <best_valid_loss:
                 best_valid_loss = valid_loss
-                test_loss,test_acc,test_jac,test_micro_f1,test_macro_f1,pred,labels=self._test()
-                logging.info("new best valid_loss,test on test set.......")
-                print("new best valid_loss,test on test set.......")
-                logging.info(f'test_loss: {test_loss:.3f}, test_acc: {test_acc:.3f}, test_jac: {test_jac:.3f}, test_micro_f1: {test_micro_f1:.3f},test_macro_f1: {test_macro_f1:.3f}')
-                self._save_model(epoch,test_loss,test_acc)
-                self._save_pred_and_labels(epoch,pred,labels)
-    
+                self._save_model(epoch,valid_loss,valid_acc)
+        print("finish train,start testing........................")
+        logging.info("finish train,start testing........................")
+        print("loading model: "+self.best_valid_loss_model)
+        self.model.load_state_dict(torch.load(self.best_valid_loss_model,map_location=torch.device("cuda:0")))
+        test_loss,test_acc,test_jac,test_micro_f1,test_macro_f1,pred,labels=self._test()
+        logging.info(f'test_loss: {test_loss:.3f}, test_acc: {test_acc:.3f}, test_jac: {test_jac:.3f}, test_micro_f1: {test_micro_f1:.3f},test_macro_f1: {test_macro_f1:.3f}')
+        self._save_pred_and_labels(pred,labels)
     
     def _save_model(self,epoch,loss,acc):
         path_name=self.opt.model_name+'_'+self.opt.pretrained_bert_name+'_'+self.time
@@ -76,16 +78,15 @@ class semeval18_trainer:
             os.mkdir(path_name)
         with open(path_name+'//option.json','w') as f:
              json.dump(self.opt.dic,f)
-            
+        self.best_valid_loss_model=path_name+'//'+file_name+'.pt'
         torch.save(self.model.state_dict(),path_name+'//'+file_name+'.pt')
         
-    def _save_pred_and_labels(self,epoch,pred,labels):
+    def _save_pred_and_labels(self,pred,labels):
         path_name=self.opt.model_name+'_'+self.opt.pretrained_bert_name+'_'+self.time
-        file_name="epoch_"+str(epoch)
         pred=pd.DataFrame(pred)
         labels=pd.DataFrame(labels)
-        pred.to_csv(path_name+"//"+file_name+"_pred.csv")
-        labels.to_csv(path_name+"//"+file_name+"_labels.csv")
+        pred.to_csv(path_name+"//"+"pred.csv")
+        labels.to_csv(path_name+"//"+"labels.csv")
         
             
     def _train(self):
