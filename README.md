@@ -36,5 +36,5 @@ SET COUNT=2022
 ## Finally,it will auto load the model and test it on testset.
 ## You can find them in root dir after training.
 
-![avatar](.\\picture\\example_result.png)
+![image](picture/example_result.png)
 
