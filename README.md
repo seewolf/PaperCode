@@ -33,7 +33,7 @@ SET COUNT=2022
 
 # Result
 ## It will auto save the log file for each epoch,and save the model with minimum loss on validation set and its result.
-## Finally,it will auto load the model and test it on testset. Metrics on testset also record in log file.It will also save the true labels and prediction when testing in a csv file.
+## Afterwards, the model will be automatically loaded and tested on the test set, and the resulting metrics will be recorded in the log file. Additionally, the true labels and predictions will be saved in a CSV file after testing.
 ## You can find them in root dir after running.
 
 ![image](picture/example_result.png)
