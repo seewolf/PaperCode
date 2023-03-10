@@ -35,6 +35,10 @@ SET COUNT=2022
 ## It will auto save the log file for each epoch,and it will save the model with the lowest loss on the validation set.
 ## Afterwards, the model will be automatically loaded and tested on the test set, and the resulting metrics will be recorded in the log file. Additionally, the true labels and predictions will be saved in a CSV file after testing.
 ## You can find them in root dir after running.
-
-![image](picture/example_result.png)
-
+# Some picture about this work
+## Run this work
+![image](picture/command.png)
+## After work finished,some output in this dir
+![image](picture/finished_dir.png)
+## train.log file shows the whole process
+![image](picture/test_after_train.png)
