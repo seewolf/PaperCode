@@ -32,5 +32,9 @@ SET COUNT=2022
 ```
 
 # Result
-## It will auto save the log for each epoch,and save the model with minimum loss on validation set and its result on test set.You can find them in root dir after training.
+## It will auto save the log for each epoch,and save the model with minimum loss on validation set and its result.
+## Finally,it will auto load the model and test it on testset.
+## You can find them in root dir after training.
+
+![avatar](.\\picture\\example_result.png)
 
