@@ -55,7 +55,10 @@ class semeval18_trainer:
             valid_loss, valid_acc,valid_jac,valid_micro_f1,valid_macro_f1 = self._evaluate()
             
 
-            
+            logging.info(f'epoch: {epoch}')
+            logging.info(f'train_loss: {train_loss:.3f}, train_acc: {train_acc:.3f}, train_jac: {train_jac:.3f}, train_micro_f1: {train_micro_f1:.3f},train_macro_f1:{train_macro_f1:.3f}')
+            logging.info(f'valid_loss: {valid_loss:.3f}, valid_acc: {valid_acc:.3f}, valid_jac: {valid_jac:.3f}, valid_micro_f1: {valid_micro_f1:.3f},valid_macro_f1: {valid_macro_f1:.3f}')   
+                 
             if valid_loss <best_valid_loss:
                 best_valid_loss = valid_loss
                 test_loss,test_acc,test_jac,test_micro_f1,test_macro_f1,pred,labels=self._test()
@@ -64,12 +67,6 @@ class semeval18_trainer:
                 logging.info(f'test_loss: {test_loss:.3f}, test_acc: {test_acc:.3f}, test_jac: {test_jac:.3f}, test_micro_f1: {test_micro_f1:.3f},test_macro_f1: {test_macro_f1:.3f}')
                 self._save_model(epoch,test_loss,test_acc)
                 self._save_pred_and_labels(epoch,pred,labels)
-                
-
-            logging.info(f'epoch: {epoch}')
-            logging.info(f'train_loss: {train_loss:.3f}, train_acc: {train_acc:.3f}, train_jac: {train_jac:.3f}, train_micro_f1: {train_micro_f1:.3f},train_macro_f1:{train_macro_f1:.3f}')
-            logging.info(f'valid_loss: {valid_loss:.3f}, valid_acc: {valid_acc:.3f}, valid_jac: {valid_jac:.3f}, valid_micro_f1: {valid_micro_f1:.3f},valid_macro_f1: {valid_macro_f1:.3f}')        
-            
     
     
     def _save_model(self,epoch,loss,acc):
